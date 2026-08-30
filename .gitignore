@@ -1,0 +1,15 @@
+# Espejo del árbol ns-3 (dañado por APFS case-insensitive; el código vive en
+# el volumen Docker y su respaldo es el fork Pbarbecho/VaN3Twin)
+VaN3Twin/
+
+# Salidas de simulación pesadas (respaldar aparte si interesan)
+results/*.pcap
+backups/
+
+# Auxiliares de LaTeX y logs
+*.aux
+*.log
+*.out
+*.toc
+build.log
+.DS_Store
