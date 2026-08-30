@@ -38,10 +38,12 @@ results/                salidas de simulación (bind mount del contenedor)
 
 ## Replicar desde cero
 
-1. **Clonar los repos** (⚠️ el fork de ns-3 **nunca** en una carpeta APFS normal
-   de macOS: el repo tiene ficheros que solo difieren en mayúsculas —
-   `ActionID/ActionId`, `BOOLEAN/boolean` — y colisionan; en este stack el
-   árbol vive en un volumen Docker, que es case-sensitive):
+1. **Clonar los repos** (⚠️ el fork de ns-3 **nunca** en filesystems
+   *case-insensitive*: ni carpetas normales de macOS (APFS) **ni de Windows
+   (NTFS)** — el repo tiene ficheros que solo difieren en mayúsculas
+   (`ActionID/ActionId`, `BOOLEAN/boolean`) y colisionan al extraerse.
+   Clonar/compilar solo en Linux, WSL2 (su ext4 interno, no `/mnt/c`) o, como
+   hace este stack, dentro de un volumen Docker, que es case-sensitive):
 
    ```bash
    git clone https://github.com/Pbarbecho/van3twin-docker.git
