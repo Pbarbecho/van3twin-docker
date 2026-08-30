@@ -210,8 +210,18 @@ Puertos: 8080 vehicle-visualizer, 5901→5900 VNC (`vnc://127.0.0.1:5901`), 8090
 `./results` (RW van3twin en `~/results`, RO backend en `/replay`).
 Env backend: modo remote, host van3twin, puerto 3400 + scan 10, order 2, net del EVA,
 poly inexistente, step 0.5, replay pattern.
-Parametrización para estudiantes: `${SUMO_GEO_DIR:-../SUMO_GEO}` y build-args
-`VAN3TWIN_REPO` (fork) / `VAN3TWIN_REF` (master).
+**Visor AUTOCONTENIDO (29-ago):** los estudiantes clonan SOLO van3twin-docker.
+`sumo-geo.Dockerfile` (multi-stage: clone → backend → frontend) clona el repo
+SUMO_GEO durante el build (build-args `SUMO_GEO_REPO`/`SUMO_GEO_REF`, patrón
+VAN3TWIN_REPO); el compose construye backend (`target: backend`) y frontend
+(`target: frontend`, nginx con estáticos horneados). Tras un push de SUMO_GEO:
+`--profile visor build --no-cache backend frontend` (la capa del clone se cachea).
+**Modo desarrollo (Pablo):** `docker-compose.dev.yml` restaura build desde el
+repo local + bind mount del frontend (editar y recargar); se activa añadiendo
+`COMPOSE_FILE=docker-compose.yml:docker-compose.dev.yml` al `.env` local (junto
+a `SUMO_GEO_DIR`), así los comandos de siempre no cambian. El stage del
+`Dockerfile.van3twin` local se llama `backend` para que el `target` heredado
+valga en ambos modos. Build-args ns-3: `VAN3TWIN_REPO` (fork) / `VAN3TWIN_REF`.
 
 **Regla de oro de builds**: `--profile visor build backend` y luego `up -d`.
 `docker compose build` a secas reconstruye van3twin (1-3 h). Cancelar un build es seguro.

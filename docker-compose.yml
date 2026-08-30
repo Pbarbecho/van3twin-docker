@@ -171,17 +171,25 @@ services:
   # activarlo con:  docker compose --profile visor up -d
   # (arranca también van3twin por el depends_on). El backend se conecta por
   # TraCI multi-cliente al SUMO que lanza ns-3 (puertos 3400-3410) y lee la
-  # geometría del volumen ns3-workspace. El código vive en el repo SUMO_GEO
-  # del Mac; tras editar backend/:
-  #   docker compose --profile visor up -d --build backend
+  # geometría del volumen ns3-workspace.
+  #
+  # AUTOCONTENIDO (2026-08-29): las imágenes clonan el repo SUMO_GEO durante
+  # el build (sumo-geo.Dockerfile) — basta clonar van3twin-docker. Para traer
+  # los últimos cambios tras un push del repo SUMO_GEO:
+  #   docker compose --profile visor build --no-cache backend frontend && \
+  #   docker compose --profile visor up -d
+  # Desarrollo con el repo LOCAL (editar y recargar): docker-compose.dev.yml
+  # (se activa con COMPOSE_FILE en el .env local, ver ese fichero).
   # ---------------------------------------------------------------------------
   backend:
     profiles: [visor]
     build:
-      # SUMO_GEO_DIR se define en un fichero .env local (no versionado);
-      # sin él, se asume el repo SUMO_GEO clonado JUNTO a esta carpeta.
-      context: ${SUMO_GEO_DIR:-../SUMO_GEO}/backend
-      dockerfile: Dockerfile.van3twin
+      context: .
+      dockerfile: sumo-geo.Dockerfile
+      target: backend
+      args:
+        SUMO_GEO_REPO: https://github.com/Pbarbecho/SUMO_GEO.git
+        SUMO_GEO_REF: main
     depends_on:
       - van3twin
     environment:
@@ -207,12 +215,15 @@ services:
 
   frontend:
     profiles: [visor]
-    image: nginx:1.27-alpine
+    build:
+      context: .
+      dockerfile: sumo-geo.Dockerfile
+      target: frontend
+      args:
+        SUMO_GEO_REPO: https://github.com/Pbarbecho/SUMO_GEO.git
+        SUMO_GEO_REF: main
     depends_on:
       - backend
-    volumes:
-      - ${SUMO_GEO_DIR:-../SUMO_GEO}/frontend:/usr/share/nginx/html:ro
-      - ${SUMO_GEO_DIR:-../SUMO_GEO}/frontend/nginx.conf:/etc/nginx/conf.d/default.conf:ro
     ports:
       - "8081:80"
 
