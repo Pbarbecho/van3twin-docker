@@ -178,8 +178,13 @@ WORKDIR /home/vanet
 
 # ---------------------------------------------------------------------------
 # Capa 5 — Clonado de VaN3Twin
+#
+# OJO: el directorio destino se fija EXPLÍCITAMENTE a "VaN3Twin". Sin él,
+# git usa el nombre del repo (p. ej. el fork "VaN3TwinGEO"), el WORKDIR
+# siguiente crearía /home/vanet/VaN3Twin VACÍO y sandbox_builder.sh
+# fallaría con "not found" (exit 127).
 # ---------------------------------------------------------------------------
-RUN git clone --branch ${VAN3TWIN_REF} ${VAN3TWIN_REPO}
+RUN git clone --branch ${VAN3TWIN_REF} ${VAN3TWIN_REPO} VaN3Twin
 
 WORKDIR /home/vanet/VaN3Twin
 
