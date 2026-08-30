@@ -16,3 +16,8 @@ build.log
 
 # configuración local por máquina (rutas propias)
 .env
+
+# documentación de trabajo y utilidades locales (fuera del repo público)
+Intergracion SUMO 3D WEB VAN3TWIN/
+RESPALDO.md
+sync-mac-edits.sh
