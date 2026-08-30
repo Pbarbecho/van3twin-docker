@@ -38,6 +38,8 @@ services:
       args:
         GRPC_VERSION: v1.60.0
         VAN3TWIN_REF: master
+        # fork con la integración SUMO-GEO incluida (parches en master)
+        VAN3TWIN_REPO: https://github.com/Pbarbecho/VaN3TwinGEO.git
 
     image: van3twin:jammy
 
@@ -176,7 +178,9 @@ services:
   backend:
     profiles: [visor]
     build:
-      context: /Users/Pablo_1/Dropbox/Mac/Documents/SUMO_GEO/backend
+      # SUMO_GEO_DIR se define en un fichero .env local (no versionado);
+      # sin él, se asume el repo SUMO_GEO clonado JUNTO a esta carpeta.
+      context: ${SUMO_GEO_DIR:-../SUMO_GEO}/backend
       dockerfile: Dockerfile.van3twin
     depends_on:
       - van3twin
@@ -207,8 +211,8 @@ services:
     depends_on:
       - backend
     volumes:
-      - /Users/Pablo_1/Dropbox/Mac/Documents/SUMO_GEO/frontend:/usr/share/nginx/html:ro
-      - /Users/Pablo_1/Dropbox/Mac/Documents/SUMO_GEO/frontend/nginx.conf:/etc/nginx/conf.d/default.conf:ro
+      - ${SUMO_GEO_DIR:-../SUMO_GEO}/frontend:/usr/share/nginx/html:ro
+      - ${SUMO_GEO_DIR:-../SUMO_GEO}/frontend/nginx.conf:/etc/nginx/conf.d/default.conf:ro
     ports:
       - "8081:80"
 

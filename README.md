@@ -55,14 +55,24 @@ results/                salidas de simulación (bind mount del contenedor)
    frontend). Editar esas tres rutas en `docker-compose.yml` para que apunten a
    donde se clonó `SUMO_GEO`.
 
-3. **Imagen van3twin con los parches incluidos**: en el `Dockerfile`, cambiar
-   la URL del `git clone` a `https://github.com/Pbarbecho/VaN3TwinGEO.git`
-   (el `VAN3TWIN_REF: master` del compose ya vale, los parches están en
-   master). Después:
+3. **Imagen van3twin** — dos vías:
+
+   **(a) Precompilada desde Docker Hub (recomendada para estudiantes, sin
+   compilar nada; requiere Apple Silicon — la imagen es arm64):**
+
+   ```bash
+   docker pull pbarbecho/van3twin:latest
+   docker tag pbarbecho/van3twin:latest van3twin:jammy   # el compose la usa tal cual
+   ```
+
+   **(b) Construir desde el fork (1-3 h; incluye los parches, que están en
+   master del fork):**
 
    ```bash
    cd van3twin-docker
-   docker compose build            # 1-3 h la primera vez
+   docker build --platform linux/arm64 \
+     --build-arg VAN3TWIN_REPO=https://github.com/Pbarbecho/VaN3TwinGEO.git \
+     -t van3twin:jammy .
    ```
 
 4. **Levantar y probar**:

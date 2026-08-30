@@ -22,6 +22,10 @@ FROM ubuntu:22.04
 ARG DEBIAN_FRONTEND=noninteractive
 ARG GRPC_VERSION=v1.60.0
 ARG VAN3TWIN_REF=master
+# Repo a clonar: por defecto el upstream de DriveX; para la imagen docente con
+# la integración SUMO-GEO incluida, pasar el fork:
+#   --build-arg VAN3TWIN_REPO=https://github.com/Pbarbecho/VaN3TwinGEO.git
+ARG VAN3TWIN_REPO=https://github.com/DriveX-devs/VaN3Twin.git
 # Bindings Python de ns-3 (necesarios para PyViz). DESACTIVADOS por defecto:
 # verificado (ago-2026, arm64) que los bindings pregenerados NO compilan con
 # los parches de VaN3Twin (fallan propagation, tap-bridge y módulos del
@@ -175,7 +179,7 @@ WORKDIR /home/vanet
 # ---------------------------------------------------------------------------
 # Capa 5 — Clonado de VaN3Twin
 # ---------------------------------------------------------------------------
-RUN git clone --branch ${VAN3TWIN_REF} https://github.com/DriveX-devs/VaN3Twin.git
+RUN git clone --branch ${VAN3TWIN_REF} ${VAN3TWIN_REPO}
 
 WORKDIR /home/vanet/VaN3Twin
 

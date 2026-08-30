@@ -13,3 +13,6 @@ backups/
 *.toc
 build.log
 .DS_Store
+
+# configuración local por máquina (rutas propias)
+.env
