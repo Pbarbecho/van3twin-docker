@@ -214,13 +214,23 @@ RUN echo "" | ./sandbox_builder.sh
 # manuales. Los grep finales validan que los parches se aplicaron (si
 # upstream cambia el fichero, la build falla aquí y no en el enlace).
 # ---------------------------------------------------------------------------
+# IDEMPOTENTE (30-ago): el fork VaN3TwinGEO ya trae este parche committeado;
+# aplicar el sed dos veces duplicaba "AnimationInterface anim" y rompía la
+# compilación ("error: redeclaration"). Cada sed se aplica SOLO si su marca
+# no está ya en el fichero; los grep finales validan igual que antes.
 RUN cd ns-3-dev/src/automotive/examples \
-    && sed -i 's|#include "ns3/wave-mac-helper.h"|#include "ns3/wave-mac-helper.h"\n#include "ns3/netanim-module.h"|' \
-        v2v-simple-cam-exchange-80211p.cc \
-    && sed -i 's|^  Simulator::Run ();|  AnimationInterface anim ("v2v-cam-exchange-anim.xml");\n  anim.SetMaxPktsPerTraceFile (500000);\n\n  Simulator::Run ();|' \
-        v2v-simple-cam-exchange-80211p.cc \
-    && sed -i '/NAME v2v-simple-cam-exchange-80211p/,/^)/ s|        ${libtraci}|        ${libtraci}\n        ${libnetanim}|' \
-        CMakeLists.txt \
+    && if ! grep -q "netanim-module.h" v2v-simple-cam-exchange-80211p.cc; then \
+         sed -i 's|#include "ns3/wave-mac-helper.h"|#include "ns3/wave-mac-helper.h"\n#include "ns3/netanim-module.h"|' \
+             v2v-simple-cam-exchange-80211p.cc; \
+       fi \
+    && if ! grep -q "AnimationInterface" v2v-simple-cam-exchange-80211p.cc; then \
+         sed -i 's|^  Simulator::Run ();|  AnimationInterface anim ("v2v-cam-exchange-anim.xml");\n  anim.SetMaxPktsPerTraceFile (500000);\n\n  Simulator::Run ();|' \
+             v2v-simple-cam-exchange-80211p.cc; \
+       fi \
+    && if ! grep -q "libnetanim" CMakeLists.txt; then \
+         sed -i '/NAME v2v-simple-cam-exchange-80211p/,/^)/ s|        ${libtraci}|        ${libtraci}\n        ${libnetanim}|' \
+             CMakeLists.txt; \
+       fi \
     && grep -q "netanim-module.h" v2v-simple-cam-exchange-80211p.cc \
     && grep -q "AnimationInterface" v2v-simple-cam-exchange-80211p.cc \
     && grep -q "libnetanim" CMakeLists.txt
