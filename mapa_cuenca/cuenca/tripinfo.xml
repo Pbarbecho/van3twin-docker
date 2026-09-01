@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!-- generated on 2026-04-19 14:46:09 by Eclipse SUMO GUI Version 1.22.0
+<sumoConfiguration xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="http://sumo.dlr.de/xsd/sumoConfiguration.xsd">
+
+    <input>
+        <net-file value="/root/omnet/VANETS/templates_xml/cuenca/cuenca.net.xml"/>
+        <route-files value="/root/omnet/VANETS/templates_xml/cuenca/cuenca.rou.xml"/>
+        <additional-files value="/root/omnet/VANETS/templates_xml/cuenca/cuenca.poly.xml,/root/omnet/VANETS/templates_xml/cuenca/additional.xml"/>
+    </input>
+
+    <output>
+        <tripinfo-output value="/root/omnet/VANETS/templates_xml/cuenca/tripinfo.xml"/>
+    </output>
+
+    <time>
+        <begin value="0"/>
+        <end value="3600"/>
+        <step-length value="1"/>
+    </time>
+
+    <processing>
+        <ignore-route-errors value="true"/>
+    </processing>
+
+    <emissions>
+        <device.emissions.probability value="1"/>
+    </emissions>
+
+</sumoConfiguration>
+-->
+
+<tripinfos xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="http://sumo.dlr.de/xsd/tripinfo_file.xsd">
+</tripinfos>

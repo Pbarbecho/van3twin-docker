@@ -1,0 +1,9 @@
+<launch>
+    <basedir path="/compartido/veins-veins-5.3.1/examples/veins/cuenca/"/>
+    <seed value="10"/>
+    <copy file="cuenca.net.xml" />
+    <copy file="cuenca.rou.xml" />
+    <copy file="cuenca.poly.xml" />
+    <copy file="mapa.sumo.cfg" type="config" />
+</launch>
+

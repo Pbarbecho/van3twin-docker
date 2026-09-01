@@ -1,0 +1,4 @@
+<additional>
+    <!-- <edgeData id="my_edgedata" file="edgedata.xml" freq="3600" excludeEmpty="true"/> -->
+    <edgeData id="emisiones_co2" type="emissions" freq="3600" file="edgedata_emissions.xml" excludeEmpty="true"/>
+</additional>
