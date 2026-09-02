@@ -125,12 +125,6 @@ services:
     # src/vehicle-visualizer). Solo necesario si se usa el visualizador;
     # el socket UDP 48110 del visualizador es interno al contenedor y no
     # necesita publicarse.
-    #
-    # Sionna nativo en el Mac (sin GPU): NO requiere publicar puertos.
-    # ns-3 (contenedor) INICIA la conexión UDP saliente hacia el servidor
-    # Sionna del host (host.docker.internal, UDP/8103) y el NAT de Docker
-    # Desktop enruta las respuestas de vuelta. Ver setup-sionna-macos.sh,
-    # run-sionna-server.sh y run-sionna-sim.sh.
     # -------------------------------------------------------------------
     ports:
       # vehicle-visualizer en el 8080 del Mac (como documenta la guía).
@@ -198,7 +192,10 @@ services:
       APP_SUMO_PORT: "3400"           # el ejemplo EVA fija SumoPort=3400
       APP_SUMO_PORT_SCAN: "10"        # probar 3400-3410 (ns-3 corre el puerto si hay TIME_WAIT)
       APP_SUMO_ORDER: "2"             # ns-3 es el cliente 1; el visor, el 2
-      APP_NET_FILE: /ns3/ns-3-dev/src/automotive/examples/sumo_files_v2v_map/map.net.xml
+      # Escenario Cuenca (copiar mapa_cuenca/cuenca a results/: queda en
+      # /replay dentro del backend). Escenario EVA por defecto:
+      # APP_NET_FILE: /ns3/ns-3-dev/src/automotive/examples/sumo_files_v2v_map/map.net.xml
+      APP_NET_FILE: /replay/cuenca/cuenca.net.xml
       APP_POLY_FILE: /no_poly.xml     # inexistente a propósito: evita el fallback al .sumocfg
       APP_STEP_LENGTH: "0.5"          # seg simulados por frame; 0.5 + interpolación en el
                                       # frontend = movimiento fluido (1.0 se veía a saltos)
