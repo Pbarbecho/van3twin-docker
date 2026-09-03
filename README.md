@@ -11,6 +11,12 @@ enlace y estadísticas de capa física.
 Desarrollado en la Universidad de Cuenca — Redes Vehiculares y Heterogéneas
 (INGE-00104). Probado en macOS Apple Silicon (imagen **arm64**).
 
+![Visor SUMO-GEO en modo replay V2X: mensajes CAM/CPM/DENM (arcos TX→RX) sobre el mapa 3D, con los paneles PHY 802.11p e históricos de la flota](visor_replay_v2x.jpg)
+
+*Replay de una corrida EVA 802.11p: arcos de recepción CAM/CPM sobre los
+edificios 3D, panel **PHY 802.11p** (RSSI, latencia TX→RX, cobertura observada,
+PER/PDR por par) y panel de **históricos** de la flota.*
+
 ## Los tres repositorios
 
 | Repo | Contenido | Rol |
