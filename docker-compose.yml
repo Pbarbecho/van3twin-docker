@@ -44,12 +44,16 @@ services:
     image: van3twin:jammy
 
     # -------------------------------------------------------------------
-    # platform: en Apple Silicon usar linux/arm64 (nativo, sin Rosetta).
-    # Cambiar a linux/amd64 SOLO si se necesita compatibilidad x86_64
-    # (p. ej. binarios CARLA); implica emulación Rosetta y builds 2-5x
-    # más lentos.
+    # platform: arquitectura de la imagen — debe coincidir con el procesador
+    # del PC (verificar con `uname -m` en la terminal Ubuntu/WSL2 o macOS):
+    #   * x86_64  -> linux/amd64  (PC Windows/Linux Intel-AMD, Mac Intel)
+    #   * arm64   -> linux/arm64  (Mac Apple Silicon M1/M2/M3/M4)
+    # Con la arquitectura equivocada Docker emula con QEMU/Rosetta: el build
+    # de ns-3 (1-3 h nativo) se multiplica varias veces o falla. Cambiarla
+    # despues de construir obliga a reconstruir desde cero.
     # -------------------------------------------------------------------
-    platform: linux/arm64
+    platform: linux/amd64          # ACTIVA: PC Windows/Linux x86_64
+    # platform: linux/arm64        # Mac Apple Silicon (descomentar y comentar la de arriba)
 
     container_name: van3twin
     hostname: van3twin

@@ -42,6 +42,32 @@ RESPALDO.md             plan de respaldo y réplica
 results/                salidas de simulación (bind mount del contenedor)
 ```
 
+## Ejecución en Windows
+
+El stack corre igual en Windows (Docker Desktop ejecuta los mismos contenedores
+Linux vía WSL2). La opción de arquitectura del `docker-compose.yml` viene
+**activa para PC x86_64** (`platform: linux/amd64`); en Mac Apple Silicon hay
+que descomentar la línea `linux/arm64` (ver el comentario en el propio compose).
+Pasos específicos de Windows:
+
+1. **Docker Desktop con WSL2**: activar el *WSL 2 based engine* y la
+   integración con la distro Ubuntu (Settings → Resources → WSL integration).
+   Asignar ≥4 CPUs y 12–16 GB de RAM (fichero `.wslconfig`).
+2. **Trabajar siempre en la terminal de Ubuntu/WSL2** (no PowerShell) y clonar
+   en el home de WSL (`~/`), **nunca** en `/mnt/c/...` (disco NTFS: E/S lenta y
+   colisión de mayúsculas).
+3. **Finales de línea**: antes de clonar,
+   `git config --global core.autocrlf false` — evita que git inyecte `\r` en
+   los scripts y el YAML, que se ejecutan dentro de contenedores Linux.
+4. **Verificar la arquitectura**: `uname -m` en la terminal Ubuntu debe decir
+   `x86_64` → la opción activa del compose (`linux/amd64`) es la correcta.
+5. **Cliente VNC**: para la GUI de SUMO, en vez de `open vnc://127.0.0.1:5901`
+   (macOS) usar un visor VNC de Windows (TightVNC, RealVNC) conectado a
+   `127.0.0.1:5901`. El visor web es igual: `http://localhost:8081`.
+
+Todo lo demás (build, comandos `docker compose`, uso del contenedor y de los
+manuales) es idéntico a macOS/Linux.
+
 ## Replicar desde cero
 
 1. **Clonar los repos** (⚠️ el fork de ns-3 **nunca** en filesystems
