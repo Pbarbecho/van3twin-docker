@@ -1,0 +1,10 @@
+<additional>
+  <vTypeDistribution id="mixed_traffic">
+    <vType id="passenger" vClass="passenger"   probability="0.1"
+           accel="2.8" decel="4.5" maxSpeed="50"/>
+    <vType id="bus"        vClass="bus"         probability="0.1"
+           length="12" accel="1.5" decel="3.0" maxSpeed="30"/>
+    <vType id="motorcycle" vClass="motorcycle"  probability="0.8"
+           accel="3.5" decel="5.0" maxSpeed="60"/>
+  </vTypeDistribution>
+</additional>

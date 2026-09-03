@@ -9,7 +9,9 @@ mensajes real (CAM/CPM/DENM), disección ASN.1 por capas, distancia/RSSI por
 enlace y estadísticas de capa física.
 
 Desarrollado en la Universidad de Cuenca — Redes Vehiculares y Heterogéneas
-(INGE-00104). Probado en macOS Apple Silicon (imagen **arm64**).
+(INGE-00104). Preparado para **PC Windows x86_64** (Docker Desktop + WSL2,
+imagen **amd64** — la opción activa del compose); también corre en Linux y en
+macOS (en Apple Silicon hay que cambiar una línea del compose, ver abajo).
 
 ![Visor SUMO-GEO en modo replay V2X: mensajes CAM/CPM/DENM (arcos TX→RX) sobre el mapa 3D, con los paneles PHY 802.11p e históricos de la flota](visor_replay_v2x.jpg)
 
@@ -30,7 +32,7 @@ PER/PDR por par) y panel de **históricos** de la flota.*
 ```
 docker-compose.yml      compose UNIFICADO: servicio van3twin + profile "visor"
                         (backend remote + frontend nginx del repo SUMO_GEO)
-Dockerfile              imagen van3twin:jammy (ubuntu 22.04 arm64, SUMO 1.12,
+Dockerfile              imagen van3twin:jammy (ubuntu 22.04 multi-arch, SUMO 1.12,
                         gRPC, NetAnim, ns-3 compilado dentro)
 Intergracion SUMO 3D WEB VAN3TWIN/
   Manual_Simulacion_VaN3Twin_SUMO_GEO.pdf   manual de operación completo
@@ -44,11 +46,11 @@ results/                salidas de simulación (bind mount del contenedor)
 
 ## Ejecución en Windows
 
-El stack corre igual en Windows (Docker Desktop ejecuta los mismos contenedores
-Linux vía WSL2). La opción de arquitectura del `docker-compose.yml` viene
-**activa para PC x86_64** (`platform: linux/amd64`); en Mac Apple Silicon hay
-que descomentar la línea `linux/arm64` (ver el comentario en el propio compose).
-Pasos específicos de Windows:
+Windows es la plataforma por defecto de este stack (Docker Desktop ejecuta los
+mismos contenedores Linux vía WSL2) y la opción de arquitectura del
+`docker-compose.yml` ya viene **activa para PC x86_64**
+(`platform: linux/amd64`) — en Windows no hay que cambiar nada del compose.
+Pasos de preparación:
 
 1. **Docker Desktop con WSL2**: activar el *WSL 2 based engine* y la
    integración con la distro Ubuntu (Settings → Resources → WSL integration).
@@ -66,7 +68,16 @@ Pasos específicos de Windows:
    `127.0.0.1:5901`. El visor web es igual: `http://localhost:8081`.
 
 Todo lo demás (build, comandos `docker compose`, uso del contenedor y de los
-manuales) es idéntico a macOS/Linux.
+manuales) es idéntico en Windows, Linux y macOS.
+
+### Si usas un Mac Apple Silicon (M1/M2/M3/M4)
+
+Único cambio: en `docker-compose.yml`, comentar la línea activa
+`platform: linux/amd64` y descomentar `platform: linux/arm64` (el propio
+compose trae ambas líneas con instrucciones) **antes** de construir. Con la
+arquitectura equivocada Docker emula con QEMU/Rosetta y el build de ns-3 se
+multiplica varias veces o falla; cambiarla después obliga a reconstruir desde
+cero. Para la GUI de SUMO en Mac: `open vnc://127.0.0.1:5901`.
 
 ## Replicar desde cero
 
@@ -89,8 +100,9 @@ manuales) es idéntico a macOS/Linux.
 
 3. **Imagen van3twin** — dos vías:
 
-   **(a) Precompilada desde Docker Hub (recomendada para estudiantes, sin
-   compilar nada; requiere Apple Silicon — la imagen es arm64):**
+   **(a) Precompilada desde Docker Hub (sin compilar nada; la imagen
+   publicada es arm64 — solo sirve en Mac Apple Silicon; en PC Windows/Linux
+   x86_64 usar la vía (b)):**
 
    ```bash
    docker pull pbarbecho/van3twin:latest
@@ -102,7 +114,8 @@ manuales) es idéntico a macOS/Linux.
 
    ```bash
    cd van3twin-docker
-   docker build --platform linux/arm64 \
+   # PC Windows/Linux x86_64 (en Mac Apple Silicon: --platform linux/arm64)
+   docker build --platform linux/amd64 \
      --build-arg VAN3TWIN_REPO=https://github.com/Pbarbecho/VaN3TwinGEO.git \
      -t van3twin:jammy .
    ```

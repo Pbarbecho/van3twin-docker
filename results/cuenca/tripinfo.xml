@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<!-- generated on 2026-09-02 17:38:40 by Eclipse SUMO sumo Version 1.12.0
+<!-- generated on 2026-09-03 03:42:34 by Eclipse SUMO sumo Version 1.12.0
 <configuration xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="http://sumo.dlr.de/xsd/sumoConfiguration.xsd">
 
     <input>
         <net-file value="/home/vanet/results/cuenca/cuenca.net.xml"/>
-        <route-files value="/home/vanet/results/cuenca/cuenca.rou.xml"/>
+        <route-files value="/home/vanet/results/cuenca/cuenca_mixed.rou.xml"/>
         <additional-files value="/home/vanet/results/cuenca/cuenca.poly.xml"/>
     </input>
 
@@ -18,7 +18,7 @@
     <time>
         <begin value="0"/>
         <end value="3600"/>
-        <step-length value="1.000000"/>
+        <step-length value="0.500000"/>
     </time>
 
     <processing>
@@ -36,7 +36,7 @@
     </emissions>
 
     <traci_server>
-        <remote-port value="3402"/>
+        <remote-port value="3401"/>
         <num-clients value="2"/>
     </traci_server>
 
@@ -47,26 +47,11 @@
     <gui_only>
         <quit-on-end value="true"/>
         <start value="true"/>
-        <tracker-interval value="1.000000"/>
+        <tracker-interval value="0.500000"/>
     </gui_only>
 
 </configuration>
 -->
 
 <tripinfos xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="http://sumo.dlr.de/xsd/tripinfo_file.xsd">
-    <tripinfo id="veh13" depart="10.00" departLane="337277962#0_0" departPos="5.10" departSpeed="0.00" departDelay="0.64" arrival="27.00" arrivalLane="337277962#0_0" arrivalPos="105.34" arrivalSpeed="6.86" duration="17.00" routeLength="100.24" waitingTime="0.00" waitingCount="0" stopTime="0.00" timeLoss="3.03" rerouteNo="0" devices="tripinfo_veh13 emissions_veh13 fcd_veh13" vType="DEFAULT_VEHTYPE" speedFactor="0.91" vaporized="">
-        <emissions CO_abs="1033.885904" CO2_abs="38154.091947" HC_abs="5.579366" PMx_abs="0.634620" NOx_abs="15.634925" fuel_abs="16.401225" electricity_abs="0"/>
-    </tripinfo>
-    <tripinfo id="veh79" depart="57.00" departLane="35287032#4_1" departPos="5.10" departSpeed="0.00" departDelay="0.12" arrival="72.00" arrivalLane="35287032#4_1" arrivalPos="93.53" arrivalSpeed="7.22" duration="15.00" routeLength="88.43" waitingTime="0.00" waitingCount="0" stopTime="0.00" timeLoss="2.59" rerouteNo="0" devices="tripinfo_veh79 emissions_veh79 fcd_veh79" vType="DEFAULT_VEHTYPE" speedFactor="0.87" vaporized="">
-        <emissions CO_abs="943.948438" CO2_abs="34332.370004" HC_abs="5.088448" PMx_abs="0.604094" NOx_abs="14.285297" fuel_abs="14.758349" electricity_abs="0"/>
-    </tripinfo>
-    <tripinfo id="veh54" depart="39.00" departLane="42143918#6_0" departPos="5.10" departSpeed="0.00" departDelay="0.12" arrival="78.00" arrivalLane="554582106#12_0" arrivalPos="98.27" arrivalSpeed="6.63" duration="39.00" routeLength="317.20" waitingTime="0.00" waitingCount="0" stopTime="0.00" timeLoss="4.68" rerouteNo="0" devices="tripinfo_veh54 emissions_veh54 fcd_veh54" vType="DEFAULT_VEHTYPE" speedFactor="0.95" vaporized="">
-        <emissions CO_abs="1568.897044" CO2_abs="81003.051812" HC_abs="9.000641" PMx_abs="1.260330" NOx_abs="32.372128" fuel_abs="34.820247" electricity_abs="0"/>
-    </tripinfo>
-    <tripinfo id="veh73" depart="53.00" departLane="45429543#0_0" departPos="5.10" departSpeed="0.00" departDelay="0.44" arrival="104.00" arrivalLane="49222366#6_1" arrivalPos="100.34" arrivalSpeed="8.66" duration="51.00" routeLength="385.12" waitingTime="0.00" waitingCount="0" stopTime="0.00" timeLoss="6.37" rerouteNo="0" devices="tripinfo_veh73 emissions_veh73 fcd_veh73" vType="DEFAULT_VEHTYPE" speedFactor="1.07" vaporized="">
-        <emissions CO_abs="2210.491110" CO2_abs="107659.685686" HC_abs="12.523624" PMx_abs="1.655473" NOx_abs="43.023917" fuel_abs="46.279083" electricity_abs="0"/>
-    </tripinfo>
-    <tripinfo id="veh80" depart="58.00" departLane="337277957#2_0" departPos="5.10" departSpeed="0.00" departDelay="0.40" arrival="125.00" arrivalLane="49217116#0_0" arrivalPos="97.13" arrivalSpeed="7.25" duration="67.00" routeLength="422.70" waitingTime="4.00" waitingCount="1" stopTime="0.00" timeLoss="16.32" rerouteNo="0" devices="tripinfo_veh80 emissions_veh80 fcd_veh80" vType="DEFAULT_VEHTYPE" speedFactor="0.93" vaporized="">
-        <emissions CO_abs="3037.969621" CO2_abs="131873.535118" HC_abs="16.853525" PMx_abs="2.131751" NOx_abs="53.427509" fuel_abs="56.687876" electricity_abs="0"/>
-    </tripinfo>
 </tripinfos>
