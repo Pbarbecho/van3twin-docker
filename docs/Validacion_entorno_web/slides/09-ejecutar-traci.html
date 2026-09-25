@@ -1,0 +1,271 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<title>09 · 2.2 · Ejecutar con tres clientes</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link href="https://fonts.googleapis.com/css2?family=Fira+Sans:wght@300;400;500;600;700;800&family=Fira+Code:wght@400;500;600&family=Alegreya:ital,wght@0,500;1,500&display=swap" rel="stylesheet">
+<style>
+/* WSN · Clase 2 — tokens compartidos (gramática C · Spiekermann) · gran auditorio · 16:9 sin barra ni pie (opción B, 2026-09-15) */
+:root{
+  --ink:#002856; --gris:#6F6F6F; --gris-claro:#DADADA; --rojo:#A51008;
+  --cuerpo:#404040; --fondo:#FFFFFF; --tinte:#E9EFF5; --suave:#F2F2F2; --borde:#BFCDDB;
+  --sans:"Fira Sans",system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;
+  --serif:"Alegreya",Georgia,serif;
+  --mono:"Fira Code",ui-monospace,"Cascadia Mono",Consolas,monospace;
+}
+html,body{background:var(--fondo)}
+body{width:1920px;height:1080px;margin:0;overflow:hidden;position:relative;font-family:var(--sans);color:var(--cuerpo);-webkit-font-smoothing:antialiased;line-height:1.3}
+*,*::before,*::after{box-sizing:border-box}
+.abs{position:absolute}
+b,strong{font-weight:700;color:var(--ink)}
+code,.mono{font-family:var(--mono);font-weight:500;color:var(--ink)}
+.neg{color:var(--rojo);font-weight:600}
+.gr{color:var(--gris)}
+
+/* Barra de marca: azul 0–72 % · rojo 72–86 % · gris claro 86–100 % */
+.brandbar{display:none;position:absolute;left:0;top:0;width:1920px;height:6px}
+.brandbar i{display:block;height:6px}
+.brandbar .b1{width:72%;background:var(--ink)}
+.brandbar .b2{width:14%;background:var(--rojo)}
+.brandbar .b3{width:14%;background:var(--gris-claro)}
+
+/* Cabecera tipográfica: retícula 12 col · margen 96 · columna 122 · medianil 24 */
+.kicker{position:absolute;left:96px;top:22px;font-size:24px;font-weight:600;letter-spacing:.14em;text-transform:uppercase;color:var(--gris);line-height:1}
+h1.t{position:absolute;left:96px;top:50px;margin:0;font-size:60px;font-weight:700;color:var(--ink);line-height:1.05;letter-spacing:-.005em;width:1500px}
+.sub{position:absolute;left:96px;top:120px;font-size:29px;font-weight:400;color:var(--cuerpo);line-height:1.3;width:1560px}
+.folio{position:absolute;right:96px;top:28px;text-align:right;line-height:1.25}
+.folio b{display:block;font-size:24px;font-weight:700;color:var(--ink)}
+.folio span{display:block;font-size:20px;font-weight:400;color:var(--gris)}
+
+/* Pie: una línea gris, nada más */
+.pie{display:none;position:absolute;left:96px;right:96px;top:1040px;font-size:17px;color:var(--gris);display:flex;justify-content:space-between;letter-spacing:.02em}
+
+/* Pasos (revelación con la flecha) */
+[data-step]{opacity:0;transform:translateY(10px);transition:opacity .45s ease,transform .45s cubic-bezier(.2,.7,.2,1)}
+[data-step].on{opacity:1;transform:none}
+svg [data-step]{transform:none;transition:opacity .45s ease}
+body.ov [data-step]{opacity:1;transform:none;transition:none}
+@media (prefers-reduced-motion: reduce){[data-step]{transition:none}}
+
+/* Bloques de código */
+pre.code{margin:0;background:var(--suave);border-left:6px solid var(--ink);padding:22px 28px;font-family:var(--mono);font-size:24px;line-height:1.5;color:var(--ink);white-space:pre;overflow:hidden;font-weight:500}
+pre.code .c{color:var(--gris);font-weight:400}
+pre.code .h{font-weight:700;color:var(--cuerpo)}
+pre.code .ln{display:block;min-height:1.5em;padding:0 8px;margin:0 -8px;border-radius:3px}
+pre.code .ln.hl{background:#fff;box-shadow:inset 0 0 0 2px var(--borde)}
+pre.code .ln.dim{opacity:.4}
+pre.term{background:var(--ink);color:#fff;border-left-color:var(--rojo)}
+pre.term .p{color:var(--gris-claro);font-weight:400}
+pre.term .c{color:#A9BCD0}
+pre.term .ok{color:#fff;font-weight:700;text-decoration:underline;text-decoration-color:#DADADA;text-underline-offset:6px}
+pre.term .bad{color:#fff;background:var(--rojo);padding:0 8px;font-weight:600}
+pre.term .ln.hl{background:rgba(255,255,255,.12);box-shadow:none}
+
+/* Tabla */
+.tabla{border-collapse:collapse;width:100%;font-size:24px;line-height:1.3}
+.tabla th{background:var(--ink);color:#fff;font-weight:700;text-align:left;padding:12px 18px;font-size:23px;letter-spacing:.02em}
+.tabla td{padding:12px 18px;border-bottom:1px solid var(--gris-claro);vertical-align:top;color:var(--cuerpo)}
+.tabla tr:nth-child(even) td{background:#F6F6F6}
+.tabla td:first-child{font-weight:700;color:var(--ink)}
+.tabla td.mono,.tabla th.mono{font-family:var(--mono);font-size:22px}
+.tabla td.mono{color:var(--ink);font-weight:500}
+.tabla tr.rojo td:first-child{color:var(--rojo)}
+.tabla tr.sweep td{background:var(--tinte) !important}
+
+/* Tarjetas */
+.tarjeta{border:1px solid var(--gris-claro);border-left:8px solid var(--ink);background:#fff;padding:20px 26px;font-size:25px;line-height:1.38;color:var(--cuerpo)}
+.tarjeta.aviso{border-left-color:var(--rojo)}
+.tarjeta.gris{border-left-color:var(--gris);background:var(--suave)}
+.tarjeta.tinte{background:var(--tinte);border-color:var(--borde)}
+.tarjeta h4{margin:0 0 6px;font-size:21px;font-weight:600;letter-spacing:.12em;text-transform:uppercase;color:var(--ink)}
+.tarjeta.aviso h4{color:var(--rojo)}
+.tarjeta.gris h4{color:var(--gris)}
+
+/* Fila de ideas numeradas (4 × 414 o 3 × 560) */
+.ideas{position:absolute;left:96px;width:1728px;display:grid;column-gap:24px}
+.ideas.c4{grid-template-columns:repeat(4,414px)}
+.ideas.c3{grid-template-columns:repeat(3,560px)}
+.ideas.c2{grid-template-columns:repeat(2,852px)}
+.idea .num{font-size:44px;font-weight:800;color:var(--ink);line-height:1;letter-spacing:-.02em}
+.idea h3{margin:14px 0 10px;font-size:30px;font-weight:700;color:var(--ink);line-height:1.15}
+.idea p{margin:0;font-size:25px;line-height:1.38;color:var(--cuerpo)}
+.idea code,.nota code{font-size:22px}
+.nota{position:absolute;left:96px;top:1000px;width:1728px;font-size:27px;line-height:1.4;color:var(--cuerpo)}
+.nota b{color:var(--ink)}
+
+/* Banner de ejercicio: una línea tipográfica, no una caja de color */
+.banner{position:absolute;left:96px;width:1728px;display:flex;align-items:baseline;gap:22px;border-bottom:3px solid var(--ink);padding-bottom:10px}
+.banner b{font-size:26px;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:var(--ink)}
+.banner span{font-size:24px;color:var(--gris)}
+.banner.rojo{border-color:var(--rojo)} .banner.rojo b{color:var(--rojo)}
+
+/* Mapa de metro (SVG) */
+svg.mapa{position:absolute;overflow:visible}
+svg.mapa text{font-family:var(--sans)}
+.st-name{font-size:30px;font-weight:700;fill:var(--ink)}
+.st-name.gr{fill:var(--gris)}
+.st-sub{font-family:var(--mono);font-size:21px;font-weight:500;fill:var(--gris)}
+.st-lbl{font-size:21px;font-weight:600;letter-spacing:.12em;text-transform:uppercase;fill:var(--gris)}
+.tren-txt{font-family:var(--mono);font-size:19px;font-weight:600}
+.chip-txt{font-family:var(--mono);font-size:21px;font-weight:600;fill:var(--ink)}
+.err-txt{font-family:var(--mono);font-size:21px;font-weight:600;fill:var(--rojo)}
+.leg-txt{font-size:23px;font-weight:500;fill:var(--cuerpo)}
+.leg-txt tspan.n{font-weight:700;fill:var(--ink)}
+.leg-txt tspan.g{font-weight:700;fill:var(--gris)}
+.box-txt{font-size:24px;font-weight:700;fill:var(--ink)}
+.box-sub{font-size:21px;font-weight:400;fill:var(--gris)}
+.mono-txt{font-family:var(--mono);font-size:20px;font-weight:500;fill:var(--ink)}
+.line-ink{stroke:var(--ink);stroke-width:12;fill:none}
+.line-gr{stroke:var(--gris);stroke-width:12;fill:none}
+.line-thin{stroke:var(--gris-claro);stroke-width:4;fill:none}
+.st{fill:#fff;stroke:var(--ink);stroke-width:6}
+.st.gr{stroke:var(--gris)}
+.st.on{fill:var(--ink)}
+.tren{fill:var(--ink)}
+.tren-b{fill:#fff;stroke:var(--ink);stroke-width:3}
+.tren-r{fill:var(--rojo)}
+.tren-g{fill:var(--gris)}
+
+/* Pilas (capas) */
+.pila{display:flex;flex-direction:column-reverse;gap:8px}
+.capa{border:3px solid var(--ink);background:#fff;font-family:var(--mono);font-size:24px;font-weight:500;color:var(--ink);padding:14px 18px;text-align:center;line-height:1.2}
+.capa.base{background:var(--tinte)}
+.capa.rw{border-style:dashed;border-color:var(--rojo);color:var(--rojo);background:#fff}
+.capa.gr{border-color:var(--gris);color:var(--gris)}
+.capa small{display:block;font-family:var(--sans);font-size:20px;font-weight:400;color:var(--gris);margin-top:4px}
+
+/* Lista tipográfica */
+.lista{margin:0;padding:0;list-style:none}
+.lista li{position:relative;padding-left:34px;font-size:26px;line-height:1.35;margin-bottom:14px;color:var(--cuerpo)}
+.lista li::before{content:"";position:absolute;left:0;top:14px;width:18px;height:4px;background:var(--ink)}
+.lista li.rojo::before{background:var(--rojo)}
+.lista li b{color:var(--ink)}
+
+
+</style>
+<style>
+
+pre.cod{position:absolute;margin:0;background:#0E2338;color:#E7EEF5;font-family:var(--mono);font-size:25px;line-height:1.55;padding:22px 28px;box-sizing:border-box;overflow:hidden;white-space:pre}
+pre.cod .cm{color:#8FB0CC}
+pre.cod .rj{color:#FF9B8E}
+pre.cod .ok{color:#A8E0B4}
+pre.cod b{color:#fff;font-weight:600}
+pre.cod .tag{color:#9CC7F0}
+pre.cod .at{color:#F2D58C}
+.cap{position:absolute;left:96px;top:196px;width:1728px;font-size:28px;color:var(--cuerpo);line-height:1.4}
+.cap b{color:var(--ink)}
+.tarjeta{box-sizing:border-box;font-size:26px;padding:20px 26px;line-height:1.38}
+.tarjeta .tt{display:block;font-size:21px;font-weight:600;letter-spacing:.12em;text-transform:uppercase;color:var(--ink);margin-bottom:6px}
+.tarjeta.aviso .tt{color:var(--rojo)}
+.tarjeta.gris .tt{color:var(--gris)}
+
+.cmd{left:96px;top:196px;width:1100px}
+.term{left:96px;top:740px;width:1100px}
+.nt{position:absolute;left:1220px;top:196px;width:604px;display:grid;row-gap:24px}
+.nt .tarjeta{font-size:25px}
+
+</style>
+</head>
+<body>
+<div class="kicker">Parte II · Cliente TraCI en Python</div>
+<h1 class="t">2.2 · Ejecutar con tres clientes</h1>
+<div class="sub">ns-3 = cliente 1 · visor = cliente 2 · traci.py = cliente 3. El número debe coincidir exactamente.</div>
+<div class="folio"><b>09 / 12</b><span>RVH · Validación del entorno</span></div>
+
+<pre class="cod cmd" data-step="1"><span class="cm"># Terminal 1 · dentro del contenedor: ahora 3 clientes</span>
+docker compose exec van3twin bash
+./ns3 run "v2v-emergencyVehicleAlert-80211p --sumo-gui=false \
+   --met-sup=true --sumo-updates=0.1 \
+   --sumo-folder=/home/vanet/results/cuenca/ \
+   --sumo-config=/home/vanet/results/cuenca/cuenca.sumocfg \
+   --mob-trace=cuenca.rou.xml <b>--num-traci-clients=3</b>"
+
+<span class="cm"># Navegador · http://localhost:8081 -> Conectar   (cliente 2)</span>
+
+<span class="cm"># Terminal 2 · en su PC: el script, como cliente 3</span>
+docker compose exec van3twin python3 ~/results/traci/traci.py</pre>
+<pre class="cod term" data-step="2">Connected to SUMO on localhost:3400
+t=0.5 veh0 pos=(1523.4,2210.8) v=0.0 m/s
+t=0.5 veh1 pos=(1610.2,2187.3) v=0.0 m/s
+t=1.0 veh0 pos=(1524.7,2211.1) v=2.7 m/s
+...</pre>
+<div class="nt">
+<div class="tarjeta tinte" data-step="3"><span class="tt">Orden de arranque</span>1 · ns-3 («waiting for 3 clients»)<br>2 · el visor en el navegador<br>3 · el script.<br>SUMO no da el primer paso hasta que los <b>tres</b> se conectan.</div>
+<div class="tarjeta aviso" data-step="4"><span class="tt">Errores típicos</span><b>Se queda en «waiting»:</b> falta un cliente. <b>«Connection refused»:</b> ns-3 aún no lanzó SUMO o pidió solo 2 clientes. <b>Todo se congela al cerrar el script:</b> no llamó a <code>traci.close()</code>.</div>
+<div class="tarjeta gris" data-step="5"><span class="tt">Valide con el docente</span>Visor y consola muestran <b>los mismos vehículos</b> avanzando a la vez.</div>
+</div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.13.0/gsap.min.js"></script>
+<script>
+/* deck.js — pasos dentro de la diapositiva + puente con index.html + utilidades de animación */
+(function(){
+  var qs = location.search || '';
+  var OV = /[?&]ov=1/.test(qs);              // miniatura en la vista general: todos los pasos visibles
+  var STILL = /[?&]still=1/.test(qs);        // ?still=1 congela los bucles (capturas, impresión)
+  var G = (typeof gsap !== 'undefined') ? gsap : null;
+  window.DECK = { ov: OV, anim: !!G && !STILL, gsap: G };
+  if (OV) document.body.classList.add('ov');
+
+  // ---- Pasos: [data-step="n"] se enciende cuando el paso actual >= n
+  var els = Array.prototype.slice.call(document.querySelectorAll('[data-step]'));
+  var max = els.reduce(function(m,e){ return Math.max(m, parseInt(e.getAttribute('data-step'),10)||0); }, 0);
+  var cur = OV ? max : 0;
+  function apply(){
+    els.forEach(function(e){ e.classList.toggle('on', (parseInt(e.getAttribute('data-step'),10)||0) <= cur); });
+    document.body.setAttribute('data-deckstep', cur);
+    document.dispatchEvent(new CustomEvent('deckstep', {detail:{step:cur, max:max}}));
+  }
+  function step(dir){
+    var consumed = false;
+    if (dir > 0 && cur < max) { cur++; consumed = true; }
+    else if (dir < 0 && cur > 0) { cur--; consumed = true; }
+    if (consumed) apply();
+    return consumed;
+  }
+  window.deckStep = step;
+  window.deckGoto = function(end){ cur = end ? max : 0; apply(); };
+
+  window.addEventListener('message', function(ev){
+    var d = ev.data || {};
+    if (d.type === 'deck-step') { var c = step(d.dir); if (window.parent !== window) window.parent.postMessage({type:'deck-step-result', consumed:c, dir:d.dir, id:d.id}, '*'); }
+    else if (d.type === 'deck-goto') { window.deckGoto(!!d.end); }
+  });
+  // Si el foco cae dentro del iframe, reenviamos las teclas al índice
+  document.addEventListener('keydown', function(e){
+    if (window.parent === window) {           // página abierta suelta: pasos con flechas
+      if (e.key === 'ArrowRight' || e.key === ' ' || e.key === 'PageDown') { if (step(1)) e.preventDefault(); }
+      else if (e.key === 'ArrowLeft' || e.key === 'PageUp') { if (step(-1)) e.preventDefault(); }
+      return;
+    }
+    window.parent.postMessage({type:'deck-key', key:e.key, ctrl:e.ctrlKey||e.metaKey, shift:e.shiftKey}, '*');
+    if (['ArrowRight','ArrowLeft',' ','PageDown','PageUp','Home','End','Escape'].indexOf(e.key) >= 0) e.preventDefault();
+  });
+  if (window.parent !== window) window.parent.postMessage({type:'deck-ready', max:max}, '*');
+  apply();
+
+  // ---- Utilidades para las escenas
+  // Bucle seguro: sólo corre cuando hay GSAP, no hay reduced-motion y no es miniatura
+  window.loop = function(fn){ if (window.DECK.anim) return fn(G); return null; };
+  // Estado estático legible cuando no hay animación
+  window.staticState = function(fn){ if (!window.DECK.anim) fn(); };
+  // Máquina de escribir por líneas para <pre> con .ln (o la crea)
+  window.splitLines = function(pre){
+    if (pre.querySelector('.ln')) return Array.prototype.slice.call(pre.querySelectorAll('.ln'));
+    pre.innerHTML = pre.innerHTML.split('\n').map(function(l){ return '<span class="ln">' + (l || ' ') + '</span>'; }).join('');
+    return Array.prototype.slice.call(pre.querySelectorAll('.ln'));
+  };
+  // Tren a lo largo de x (SVG <g> con transform via GSAP)
+  window.travel = function(tl, sel, x0, x1, dur, ease){
+    return tl.set(sel, {x:x0, opacity:0}).to(sel, {opacity:1, duration:.25}).to(sel, {x:x1, duration:dur||2.4, ease:ease||'power1.inOut'}, '<').to(sel, {opacity:0, duration:.25});
+  };
+})();
+
+
+</script>
+<script>
+(function(){
+
+})();
+</script>
+</body>
+</html>
