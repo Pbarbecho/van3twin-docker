@@ -49,5 +49,16 @@ try:
             print(f"t={t:.1f} {vid} pos=({x:.1f},{y:.1f}) v={v:.1f} m/s")
         # También se puede actuar sobre SUMO, p. ej.:
         # traci.vehicle.setSpeed("veh1", 5.0)
+except traci.exceptions.FatalTraCIError as exc:
+    # Fin normal: al cumplirse --sim-time, ns-3 cierra SUMO y la conexión
+    # se corta ("connection closed by SUMO"). No es un error.
+    print(f"SUMO cerró la conexión ({exc}); fin de la simulación.")
+except KeyboardInterrupt:
+    print("Interrumpido por el usuario.")
 finally:
-    traci.close()              # si no se cierra, SUMO queda esperando a este cliente
+    # Cerrar solo si la conexión sigue viva; en SUMO 1.12 close() falla
+    # sobre una conexión ya cerrada por el servidor
+    try:
+        traci.close()          # si no se cierra, SUMO queda esperando a este cliente
+    except Exception:
+        pass
