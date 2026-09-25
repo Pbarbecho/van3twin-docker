@@ -181,7 +181,7 @@ ul.chk li b{color:var(--ink)}
 
 <div class="iz" data-step="1"><div class="rot">Lo que el docente comprueba</div><ul class="chk">
 <li><b>Parte I:</b> el visor web muestra el mapa de <b>Cuenca</b> con los vehículos en movimiento (2 clientes)</li>
-<li><b>Parte II:</b> <code>traci.py</code> conectado como cliente 3, imprimiendo los mismos vehículos que el visor</li>
+<li><b>Parte II:</b> <code>cliente_traci.py</code> conectado como cliente 3, imprimiendo los mismos vehículos que el visor</li>
 <li><b>Parte III:</b> <code>results/flota.csv</code> con cabecera <code>t,id,tipo,v_ms,x,y</code> y una fila por vehículo y paso</li>
 <li>El script modificado, con <code>f.close()</code> y <code>traci.close()</code> en el <code>finally</code></li>
 </ul></div>
@@ -189,7 +189,7 @@ ul.chk li b{color:var(--ink)}
 <tr><th>Elemento</th><th>Formato</th><th>Peso</th></tr>
 <tr><td>Captura del visor con Cuenca</td><td>PNG</td><td>25 %</td></tr>
 <tr><td>Captura de la consola de <code>traci.py</code></td><td>PNG</td><td>25 %</td></tr>
-<tr><td><code>traci.py</code> modificado</td><td>.py</td><td>25 %</td></tr>
+<tr><td><code>cliente_traci.py</code> modificado</td><td>.py</td><td>25 %</td></tr>
 <tr><td><code>flota.csv</code> + 3 líneas de análisis</td><td>CSV + texto</td><td>25 %</td></tr>
 </table>
 <div class="tarjeta tinte" style="margin-top:22px"><span class="tt">Para ir más lejos</span>Con el CSV: velocidad media por tipo de vehículo, o el vehículo que más tiempo estuvo detenido (<code>v_ms &lt; 0.1</code>). Con TraCI: <code>traci.vehicle.setSpeed(vid, 0)</code> para detener uno y ver cómo cambian los mensajes CAM en el visor.</div></div>

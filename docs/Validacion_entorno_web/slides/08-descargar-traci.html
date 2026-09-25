@@ -2,7 +2,7 @@
 <html lang="es">
 <head>
 <meta charset="utf-8">
-<title>08 · 2.1 · Descargar traci.py</title>
+<title>08 · 2.1 · Descargar cliente_traci.py</title>
 <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link href="https://fonts.googleapis.com/css2?family=Fira+Sans:wght@300;400;500;600;700;800&family=Fira+Code:wght@400;500;600&family=Alegreya:ital,wght@0,500;1,500&display=swap" rel="stylesheet">
 <style>
 /* WSN · Clase 2 — tokens compartidos (gramática C · Spiekermann) · gran auditorio · 16:9 sin barra ni pie (opción B, 2026-09-15) */
@@ -168,20 +168,20 @@ pre.cod .at{color:#F2D58C}
 </head>
 <body>
 <div class="kicker">Parte II · Cliente TraCI en Python</div>
-<h1 class="t">2.1 · Descargar traci.py</h1>
+<h1 class="t">2.1 · Descargar cliente_traci.py</h1>
 <div class="sub">El script vive en el repositorio del curso; se descarga a results/ para que el contenedor lo vea.</div>
 <div class="folio"><b>08 / 12</b><span>RVH · Validación del entorno</span></div>
 
 <pre class="cod cmd" data-step="1"><span class="cm"># En su PC, desde la carpeta del proyecto (van3twin-docker)</span>
 mkdir -p results/traci
-curl -L -o results/traci/traci.py \
-  https://raw.githubusercontent.com/Pbarbecho/van3twin-docker/main/results/traci/traci.py
+curl -L -o results/traci/cliente_traci.py \
+  https://raw.githubusercontent.com/Pbarbecho/van3twin-docker/main/results/traci/cliente_traci.py
 
 <span class="cm"># Si ya tiene el repo clonado, basta con actualizarlo</span>
 git pull origin main
-ls results/traci/traci.py                       <span class="cm"># ← debe existir</span></pre>
+ls results/traci/cliente_traci.py                       <span class="cm"># ← debe existir</span></pre>
 <div class="nt">
-<div class="tarjeta tinte" data-step="2"><span class="tt">Dónde queda</span>En su PC: <code>results/traci/traci.py</code>.<br>En el contenedor: <code>~/results/traci/traci.py</code> (mismo archivo, por el bind mount).<pre class="cod">docker compose exec van3twin ls ~/results/traci/</pre></div>
+<div class="tarjeta tinte" data-step="2"><span class="tt">Dónde queda</span>En su PC: <code>results/traci/cliente_traci.py</code>.<br>En el contenedor: <code>~/results/traci/cliente_traci.py</code> (mismo archivo, por el bind mount).<pre class="cod">docker compose exec van3twin ls ~/results/traci/</pre></div>
 <div class="tarjeta" data-step="3"><span class="tt">Qué hace el script</span><ul class="lista" style="margin-top:6px"><li>Prueba los puertos <b>3400–3410</b> hasta encontrar SUMO</li><li>Declara <code>traci.setOrder(3)</code> antes del primer paso</li><li>En cada iteración pide <code>simulationStep(t + 0.5)</code></li><li>Imprime id, posición y velocidad de cada vehículo</li><li>Cierra con <code>traci.close()</code> al terminar</li></ul></div>
 </div>
 <div class="nota" data-step="4"><b>No necesita instalar nada:</b> el contenedor ya trae SUMO 1.12 con su librería <code>traci</code> y <code>SUMO_HOME=/usr/share/sumo</code>. El script se ejecuta <b>dentro</b> del contenedor.</div>

@@ -183,15 +183,15 @@ docker compose exec van3twin bash
 <span class="cm"># Navegador · http://localhost:8081 -> Conectar   (cliente 2)</span>
 
 <span class="cm"># Terminal 2 · en su PC: el script, como cliente 3</span>
-docker compose exec van3twin python3 ~/results/traci/traci.py</pre>
-<pre class="cod term" data-step="2">Connected to SUMO on localhost:3400
+docker compose exec van3twin python3 ~/results/traci/cliente_traci.py</pre>
+<pre class="cod term" data-step="2">Conectado a SUMO en localhost:3401
 t=0.5 veh0 pos=(1523.4,2210.8) v=0.0 m/s
 t=0.5 veh1 pos=(1610.2,2187.3) v=0.0 m/s
 t=1.0 veh0 pos=(1524.7,2211.1) v=2.7 m/s
 ...</pre>
 <div class="nt">
 <div class="tarjeta tinte" data-step="3"><span class="tt">Orden de arranque</span>1 · ns-3 («waiting for 3 clients»)<br>2 · el visor en el navegador<br>3 · el script.<br>SUMO no da el primer paso hasta que los <b>tres</b> se conectan.</div>
-<div class="tarjeta aviso" data-step="4"><span class="tt">Errores típicos</span><b>Se queda en «waiting»:</b> falta un cliente. <b>«Connection refused»:</b> ns-3 aún no lanzó SUMO o pidió solo 2 clientes. <b>Todo se congela al cerrar el script:</b> no llamó a <code>traci.close()</code>.</div>
+<div class="tarjeta aviso" data-step="4"><span class="tt">Errores típicos</span><b>Se queda en «waiting»:</b> falta un cliente. <b>«SUMO no responde en 3400-3410»:</b> ns-3 no está esperando, o el script se llama <code>traci.py</code> y se importa a sí mismo (aparece <code>__pycache__</code>): renómbrelo. <b>Todo se congela al cerrar el script:</b> no llamó a <code>traci.close()</code>.</div>
 <div class="tarjeta gris" data-step="5"><span class="tt">Valide con el docente</span>Visor y consola muestran <b>los mismos vehículos</b> avanzando a la vez.</div>
 </div>
 
