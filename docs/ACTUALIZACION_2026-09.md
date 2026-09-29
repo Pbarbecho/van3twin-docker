@@ -74,12 +74,15 @@ Debe devolver `"proto":2`. Si devuelve otra cosa, repite el paso con
 
 El árbol ns-3 de tu volumen **no es un repositorio git** (el instalador de
 VaN3Twin borra `.git`), así que los parches se copian con un script desde el
-host. Con el contenedor arrancado:
-
-### Mac, Linux o Windows con WSL2 / Git Bash
+host. Con el contenedor arrancado :
 
 ```bash
 docker compose up -d
+```
+
+### Desde otra terminal y desde el directorio van3twin ejecute:
+
+```bash
 ./tools/apply-ns3-patches.sh
 ```
 
@@ -88,14 +91,6 @@ ficheros parcheados de `ns3-patches/` y lanza `./ns3 build` (solo recompila
 los módulos `traci` y `automotive`). Termina con
 `'build' finished successfully`.
 
-### Windows con PowerShell (sin WSL2)
-
-```powershell
-docker compose up -d
-docker compose exec -T van3twin bash -c "cd /home/vanet/VaN3Twin/ns-3-dev && tar cf /home/vanet/ns3-patches-backup.tar src/traci/model/traci-client.cc src/traci/model/traci-client.h src/automotive/model/Facilities/vdpTraci.cc src/automotive/model/Facilities/vdpTraci.h src/automotive/model/Facilities/caBasicService.cc src/automotive/model/utilities/sumo-sensor.cc src/automotive/model/Measurements/MetricSupervisor.cc src/automotive/examples/v2v-emergencyVehicleAlert-80211p.cc"
-docker compose cp ns3-patches/src/. van3twin:/home/vanet/VaN3Twin/ns-3-dev/src/
-docker compose exec -T van3twin bash -c "cd /home/vanet/VaN3Twin/ns-3-dev && ./ns3 build"
-```
 
 ### Notas
 
